@@ -1,14 +1,17 @@
 class ProjectInput {
-  rootElement;
-  templateElement;
+  rootElement!: HTMLDivElement;
+  templateElement!: HTMLTemplateElement;
 
   constructor() {
+    this.init();
+    this.render();
+  }
+
+  private init() {
     this.rootElement = <HTMLDivElement>document.getElementById("app");
     this.templateElement = <HTMLTemplateElement>(
       document.getElementById("project-input")
     );
-
-    this.render();
   }
 
   private render() {
@@ -17,7 +20,10 @@ class ProjectInput {
       true,
     );
 
-    this.rootElement.appendChild(importedNode);
+    const formElement = <HTMLFormElement>importedNode.firstElementChild;
+    formElement.id = "user-input";
+
+    this.rootElement.insertAdjacentElement("afterbegin", formElement);
   }
 }
 
