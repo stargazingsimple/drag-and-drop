@@ -1,29 +1,54 @@
+import { Autobind } from "./decorators/autobind.js";
+
 class ProjectInput {
   rootElement!: HTMLDivElement;
-  templateElement!: HTMLTemplateElement;
+  formElement!: HTMLFormElement;
+  titleInputElement!: HTMLInputElement;
+  descriptionTextAreaElement!: HTMLTextAreaElement;
+  peopleInputElement!: HTMLInputElement;
+  submitButtonElement!: HTMLButtonElement;
 
   constructor() {
-    this.init();
-    this.render();
+    this.renderForm();
+    this.getFormElements();
   }
 
-  private init() {
+  private renderForm() {
     this.rootElement = <HTMLDivElement>document.getElementById("app");
-    this.templateElement = <HTMLTemplateElement>(
+    const templateElement = <HTMLTemplateElement>(
       document.getElementById("project-input")
     );
+
+    const importedNode = document.importNode(templateElement.content, true);
+
+    this.formElement = <HTMLFormElement>importedNode.firstElementChild;
+    this.formElement.id = "user-input";
+    this.formElement.addEventListener("submit", this.submitHandler);
+
+    this.rootElement.insertAdjacentElement("afterbegin", this.formElement);
   }
 
-  private render() {
-    const importedNode = document.importNode(
-      this.templateElement.content,
-      true,
+  private getFormElements() {
+    this.titleInputElement = <HTMLInputElement>(
+      this.formElement.querySelector("#title")
     );
+    this.descriptionTextAreaElement = <HTMLTextAreaElement>(
+      this.formElement.querySelector("#description")
+    );
+    this.peopleInputElement = <HTMLInputElement>(
+      this.formElement.querySelector("#people")
+    );
+    this.submitButtonElement = <HTMLButtonElement>(
+      this.formElement.querySelector("button")
+    );
+  }
 
-    const formElement = <HTMLFormElement>importedNode.firstElementChild;
-    formElement.id = "user-input";
-
-    this.rootElement.insertAdjacentElement("afterbegin", formElement);
+  @Autobind
+  private submitHandler(e: SubmitEvent) {
+    e.preventDefault();
+    console.log(this.titleInputElement.value);
+    console.log(this.descriptionTextAreaElement.value);
+    console.log(this.peopleInputElement.value);
   }
 }
 
