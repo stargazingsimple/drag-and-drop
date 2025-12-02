@@ -43,12 +43,34 @@ class ProjectInput {
     );
   }
 
+  private getFormValues(): [string, string, number] {
+    const titleInputValue = this.titleInputElement.value;
+    const descriptionInputValue = this.descriptionTextAreaElement.value;
+    const peopleInputValue = +this.peopleInputElement.value;
+
+    return [titleInputValue, descriptionInputValue, peopleInputValue];
+  }
+
+  private resetForm() {
+    this.titleInputElement.value = "";
+    this.descriptionTextAreaElement.value = "";
+    this.peopleInputElement.value = "";
+  }
+
   @Autobind
   private submitHandler(e: SubmitEvent) {
     e.preventDefault();
-    console.log(this.titleInputElement.value);
-    console.log(this.descriptionTextAreaElement.value);
-    console.log(this.peopleInputElement.value);
+    const formValues = this.getFormValues();
+    if (Array.isArray(formValues)) {
+      const [titleInputValue, descriptionInputValue, peopleInputValue] =
+        formValues;
+      console.log({
+        title: titleInputValue,
+        description: descriptionInputValue,
+        people: peopleInputValue,
+      });
+      this.resetForm();
+    }
   }
 }
 
