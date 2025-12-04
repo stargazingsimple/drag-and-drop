@@ -1,4 +1,5 @@
 import { Autobind } from "./decorators/autobind.js";
+import { Validate } from "./utils/validation.js";
 
 class ProjectInput {
   rootElement!: HTMLDivElement;
@@ -43,12 +44,41 @@ class ProjectInput {
     );
   }
 
-  private getFormValues(): [string, string, number] {
-    const titleInputValue = this.titleInputElement.value;
-    const descriptionInputValue = this.descriptionTextAreaElement.value;
-    const peopleInputValue = +this.peopleInputElement.value;
+  private getFormValues(): [string, string, number] | void {
+    const titleValue = this.titleInputElement.value;
+    const descriptionValue = this.descriptionTextAreaElement.value;
+    const peopleValue = +this.peopleInputElement.value;
 
-    return [titleInputValue, descriptionInputValue, peopleInputValue];
+    const formFieldsConfigs = [
+      {
+        value: titleValue,
+        required: true,
+        minLength: 2,
+        maxLength: 14,
+      },
+      {
+        value: descriptionValue,
+        required: true,
+        minLength: 2,
+        maxLength: 14,
+      },
+      {
+        value: peopleValue,
+        required: true,
+        minValue: 2,
+        maxValue: 14,
+      },
+    ];
+
+    if (
+      formFieldsConfigs.every((fieldConfig) =>
+        new Validate(fieldConfig).isValid(),
+      )
+    ) {
+      return [titleValue, descriptionValue, peopleValue];
+    } else {
+      alert("Invalid input value!");
+    }
   }
 
   private resetForm() {
