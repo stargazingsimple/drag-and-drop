@@ -1,8 +1,37 @@
 import { Autobind } from "./decorators/autobind.js";
 import { Validate } from "./utils/validation.js";
 
+class ProjectList {
+  constructor(public type: "active" | "finished") {
+    this.renderList();
+  }
+
+  renderList() {
+    const rootElement = <HTMLDivElement>document.getElementById("app");
+    const templateElement = <HTMLTemplateElement>(
+      document.getElementById("project-list")
+    );
+
+    const importedNode = document.importNode(templateElement.content, true);
+
+    const listSectionElement = <HTMLElement>importedNode.firstElementChild;
+    listSectionElement.id = `${this.type}-projects`;
+
+    const listElement = <HTMLUListElement>(
+      listSectionElement.querySelector("ul")
+    );
+    listElement.id = `${this.type}-projects-list`;
+
+    const listTitleElement = <HTMLHeadingElement>(
+      listSectionElement.querySelector("h2")
+    );
+    listTitleElement.textContent = `${this.type.toUpperCase()} PROJECTS`;
+
+    rootElement.insertAdjacentElement("beforeend", listSectionElement);
+  }
+}
+
 class ProjectInput {
-  rootElement!: HTMLDivElement;
   formElement!: HTMLFormElement;
   titleInputElement!: HTMLInputElement;
   descriptionTextAreaElement!: HTMLTextAreaElement;
@@ -15,7 +44,7 @@ class ProjectInput {
   }
 
   private renderForm() {
-    this.rootElement = <HTMLDivElement>document.getElementById("app");
+    const rootElement = <HTMLDivElement>document.getElementById("app");
     const templateElement = <HTMLTemplateElement>(
       document.getElementById("project-input")
     );
@@ -26,7 +55,7 @@ class ProjectInput {
     this.formElement.id = "user-input";
     this.formElement.addEventListener("submit", this.submitHandler);
 
-    this.rootElement.insertAdjacentElement("afterbegin", this.formElement);
+    rootElement.insertAdjacentElement("afterbegin", this.formElement);
   }
 
   private getFormElements() {
@@ -105,3 +134,5 @@ class ProjectInput {
 }
 
 new ProjectInput();
+new ProjectList("active");
+new ProjectList("finished");
