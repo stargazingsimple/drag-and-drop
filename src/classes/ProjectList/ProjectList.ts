@@ -1,10 +1,10 @@
-import { ProjectType } from "../Project/Project.js";
+import { ProjectStatus, ProjectType } from "../Project/Project.js";
 import { store } from "../ProjectState/ProjectState.js";
 
 export class ProjectList {
   assignedProjects: ProjectType[] = [];
 
-  constructor(public type: "active" | "finished") {
+  constructor(public type: ProjectStatus) {
     this.render();
   }
 
@@ -30,8 +30,15 @@ export class ProjectList {
     listTitleElement.textContent = `${this.type.toUpperCase()} PROJECTS`;
 
     store.addListener((projects: ProjectType[]) => {
-      this.assignedProjects = projects;
+      this.assignedProjects = projects.filter(({ status }) => {
+        if (this.type === ProjectStatus.Active) {
+          return status === ProjectStatus.Active;
+        } else {
+          return status === ProjectStatus.Finished;
+        }
+      });
 
+      listElement.innerHTML = "";
       for (const project of this.assignedProjects) {
         const listItem = document.createElement("li");
         listItem.textContent = project.title;
