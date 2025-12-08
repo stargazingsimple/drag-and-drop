@@ -1,13 +1,13 @@
 import { Project, ProjectType, ProjectStatus } from "../Project/Project.js";
+import { State } from "../State/State.js";
 
-type ListenerType = (projects: ProjectType[]) => void;
-
-class ProjectState {
-  private listeners: ListenerType[] = [];
+class ProjectState extends State<ProjectType> {
   private projects: ProjectType[] = [];
   private static instance: ProjectState;
 
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   static getInstance() {
     if (this.instance) {
@@ -31,10 +31,6 @@ class ProjectState {
     for (const listener of this.listeners) {
       listener(cloneProjects);
     }
-  }
-
-  addListener(listener: ListenerType) {
-    this.listeners.push(listener);
   }
 }
 

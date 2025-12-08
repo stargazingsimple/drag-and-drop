@@ -1,31 +1,23 @@
 import { ProjectStatus, ProjectType } from "../Project/Project.js";
+import { Component } from "../Component/Component.js";
 import { store } from "../ProjectState/ProjectState.js";
 
-export class ProjectList {
+export class ProjectList extends Component<HTMLElement> {
   assignedProjects: ProjectType[] = [];
 
   constructor(public type: ProjectStatus) {
-    this.render();
+    super("project-list", `${type}-projects`, false);
+    this.configure();
   }
 
-  render() {
-    const rootElement = <HTMLDivElement>document.getElementById("app");
-    const templateElement = <HTMLTemplateElement>(
-      document.getElementById("project-list")
-    );
-
-    const importedNode = document.importNode(templateElement.content, true);
-
-    const listSectionElement = <HTMLElement>importedNode.firstElementChild;
-    listSectionElement.id = `${this.type}-projects`;
-
+  configure() {
     const listElement = <HTMLUListElement>(
-      listSectionElement.querySelector("ul")
+      this.attachedElement.querySelector("ul")
     );
     listElement.id = `${this.type}-projects-list`;
 
     const listTitleElement = <HTMLHeadingElement>(
-      listSectionElement.querySelector("h2")
+      this.attachedElement.querySelector("h2")
     );
     listTitleElement.textContent = `${this.type.toUpperCase()} PROJECTS`;
 
@@ -45,7 +37,5 @@ export class ProjectList {
         listElement.appendChild(listItem);
       }
     });
-
-    rootElement.insertAdjacentElement("beforeend", listSectionElement);
   }
 }

@@ -1,46 +1,36 @@
 import { Autobind } from "../../decorators/autobind.js";
 import { Validate } from "../../utils/validation.js";
+import { Component } from "../Component/Component.js";
 import { store } from "../ProjectState/ProjectState.js";
 
-export class ProjectInput {
-  formElement!: HTMLFormElement;
+export class ProjectInput extends Component<HTMLFormElement> {
   titleInputElement!: HTMLInputElement;
   descriptionTextAreaElement!: HTMLTextAreaElement;
   peopleInputElement!: HTMLInputElement;
   submitButtonElement!: HTMLButtonElement;
 
   constructor() {
-    this.renderForm();
+    super("project-input", "user-input", true);
     this.getFormElements();
+    this.configure();
   }
 
-  private renderForm() {
-    const rootElement = <HTMLDivElement>document.getElementById("app");
-    const templateElement = <HTMLTemplateElement>(
-      document.getElementById("project-input")
-    );
-
-    const importedNode = document.importNode(templateElement.content, true);
-
-    this.formElement = <HTMLFormElement>importedNode.firstElementChild;
-    this.formElement.id = "user-input";
-    this.formElement.addEventListener("submit", this.submitHandler);
-
-    rootElement.insertAdjacentElement("afterbegin", this.formElement);
+  configure() {
+    this.attachedElement.addEventListener("submit", this.submitHandler);
   }
 
   private getFormElements() {
     this.titleInputElement = <HTMLInputElement>(
-      this.formElement.querySelector("#title")
+      this.attachedElement.querySelector("#title")
     );
     this.descriptionTextAreaElement = <HTMLTextAreaElement>(
-      this.formElement.querySelector("#description")
+      this.attachedElement.querySelector("#description")
     );
     this.peopleInputElement = <HTMLInputElement>(
-      this.formElement.querySelector("#people")
+      this.attachedElement.querySelector("#people")
     );
     this.submitButtonElement = <HTMLButtonElement>(
-      this.formElement.querySelector("button")
+      this.attachedElement.querySelector("button")
     );
   }
 
