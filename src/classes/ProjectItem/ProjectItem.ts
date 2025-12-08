@@ -1,7 +1,12 @@
 import { Component } from "../Component/Component.js";
 import { ProjectType } from "../Project/Project.js";
+import { Draggable } from "../../utils/interfaces.js";
+import { Autobind } from "../../decorators/autobind.js";
 
-export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+export class ProjectItem
+  extends Component<HTMLUListElement, HTMLLIElement>
+  implements Draggable
+{
   private project: ProjectType;
 
   get peopleText() {
@@ -31,5 +36,15 @@ export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
       this.attachedElement.querySelector("p")
     );
     descriptionElement.textContent = this.project.description;
+
+    this.attachedElement.addEventListener("dragstart", this.dragStartHandler);
+  }
+
+  @Autobind
+  dragStartHandler(event: DragEvent) {
+    if (event.dataTransfer) {
+      event.dataTransfer.setData("text/plain", this.project.id);
+      event.dataTransfer.effectAllowed = "move";
+    }
   }
 }

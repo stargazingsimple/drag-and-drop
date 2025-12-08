@@ -1,4 +1,4 @@
-import { Project, ProjectType, ProjectStatus } from "../Project/Project.js";
+import { Project, ProjectStatus, ProjectType } from "../Project/Project.js";
 import { State } from "../State/State.js";
 
 class ProjectState extends State<ProjectType> {
@@ -26,6 +26,20 @@ class ProjectState extends State<ProjectType> {
 
     this.projects.push(projectInstance.project);
 
+    this.updateListeners();
+  }
+
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const updatedProject = this.projects.find(
+      (project) => project.id === projectId,
+    );
+    if (updatedProject && updatedProject.status !== newStatus) {
+      updatedProject.status = newStatus;
+      this.updateListeners();
+    }
+  }
+
+  private updateListeners() {
     const cloneProjects: ProjectType[] = this.projects.slice();
 
     for (const listener of this.listeners) {
