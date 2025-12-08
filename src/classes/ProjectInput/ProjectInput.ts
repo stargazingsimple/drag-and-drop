@@ -3,14 +3,14 @@ import { Validate } from "../../utils/validation.js";
 import { Component } from "../Component/Component.js";
 import { store } from "../ProjectState/ProjectState.js";
 
-export class ProjectInput extends Component<HTMLFormElement> {
+export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   titleInputElement!: HTMLInputElement;
   descriptionTextAreaElement!: HTMLTextAreaElement;
   peopleInputElement!: HTMLInputElement;
   submitButtonElement!: HTMLButtonElement;
 
   constructor() {
-    super("project-input", "user-input", true);
+    super("app", "project-input", true, "user-input");
     this.getFormElements();
     this.configure();
   }
@@ -55,8 +55,8 @@ export class ProjectInput extends Component<HTMLFormElement> {
       {
         value: peopleValue,
         required: true,
-        minValue: 2,
-        maxValue: 14,
+        minValue: 0,
+        maxValue: 10,
       },
     ];
 

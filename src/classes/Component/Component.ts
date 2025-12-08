@@ -1,15 +1,17 @@
-export abstract class Component<T extends HTMLElement> {
-  rootElement = <HTMLDivElement>document.getElementById("app");
+export abstract class Component<T extends HTMLElement, U extends HTMLElement> {
+  rootElement!: T;
   templateElement!: HTMLTemplateElement;
-  attachedElement!: T;
+  attachedElement!: U;
 
   protected constructor(
-    templateId: string,
-    attachedElementId: string,
+    rootElementId: string,
+    templateElementId: string,
     insertAtBeginning: boolean,
+    attachedElementId?: string,
   ) {
+    this.rootElement = <T>document.getElementById(rootElementId);
     this.templateElement = <HTMLTemplateElement>(
-      document.getElementById(templateId)
+      document.getElementById(templateElementId)
     );
 
     const importedNode = document.importNode(
@@ -17,8 +19,11 @@ export abstract class Component<T extends HTMLElement> {
       true,
     );
 
-    this.attachedElement = <T>importedNode.firstElementChild;
-    this.attachedElement.id = attachedElementId;
+    this.attachedElement = <U>importedNode.firstElementChild;
+
+    if (attachedElementId) {
+      this.attachedElement.id = attachedElementId;
+    }
 
     this.rootElement.insertAdjacentElement(
       insertAtBeginning ? "afterbegin" : "beforeend",

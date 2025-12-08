@@ -1,12 +1,13 @@
 import { ProjectStatus, ProjectType } from "../Project/Project.js";
 import { Component } from "../Component/Component.js";
+import { ProjectItem } from "../ProjectItem/ProjectItem.js";
 import { store } from "../ProjectState/ProjectState.js";
 
-export class ProjectList extends Component<HTMLElement> {
+export class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   assignedProjects: ProjectType[] = [];
 
   constructor(public type: ProjectStatus) {
-    super("project-list", `${type}-projects`, false);
+    super("app", "project-list", false, `${type}-projects`);
     this.configure();
   }
 
@@ -32,9 +33,7 @@ export class ProjectList extends Component<HTMLElement> {
 
       listElement.innerHTML = "";
       for (const project of this.assignedProjects) {
-        const listItem = document.createElement("li");
-        listItem.textContent = project.title;
-        listElement.appendChild(listItem);
+        new ProjectItem(project, this.type);
       }
     });
   }
