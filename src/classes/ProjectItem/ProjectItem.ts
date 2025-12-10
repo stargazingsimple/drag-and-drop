@@ -1,7 +1,7 @@
-import { Component } from "../Component/Component.js";
-import { type ProjectType } from "../Project/Project.js";
-import { Autobind } from "../../decorators/autobind.js";
-import { type Draggable } from "../../utils/interfaces.js";
+import { Component } from "../Component/Component";
+import { type ProjectType } from "../Project/Project";
+import { Autobind } from "../../decorators/autobind";
+import { type Draggable } from "../../utils/interfaces";
 
 export class ProjectItem
   extends Component<HTMLUListElement, HTMLLIElement>

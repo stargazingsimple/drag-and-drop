@@ -1,9 +1,5 @@
-import { State } from "../State/State.js";
-import {
-  Project,
-  ProjectStatus,
-  type ProjectType,
-} from "../Project/Project.js";
+import { State } from "../State/State";
+import { Project, ProjectStatus, type ProjectType } from "../Project/Project";
 
 class ProjectState extends State<ProjectType> {
   private projects: ProjectType[] = [];
